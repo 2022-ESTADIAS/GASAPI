@@ -3,43 +3,42 @@ const path = require("path");
 const fs = require("fs");
 const https = require("https");
 const {XMLParser} = require("fast-xml-parser");
+const cron = require("node-cron");
 
 const parser = new XMLParser();
 
-let lugares;
+let precios;
 
 //descargar archivo xml y almacenarlo en el server
-const file = fs.createWriteStream(path.join(__dirname, "../data/places.xml"));
+/**
+ * El proceso de descarga y almacenamiento de archivo XML a servidor, se debe de ejecutar cada 4Hrs
+ */
+const file = fs.createWriteStream(path.join(__dirname, "../data/prices.xml"));
 
- const request = https.get('https://publicacionexterna.azurewebsites.net/publicaciones/places',(response)=>{    
+ const request = https.get('https://publicacionexterna.azurewebsites.net/publicaciones/prices',(response)=>{    
      response.pipe(file)
  })
 
-//carga de los lugares  lectura asyncrona
-// fs.readFile(path.join(__dirname, "../data/places.xml"),'utf-8',(err,data)=>{
-//     if(err) {
-//         throw new Error('no se puede leer');
-//     }
-//     else{
-//         // lugares =JSON.stringify(data);
-//         lugares  = parser.parse(data); 
-//     }
-// });
 
-//lectura sincrona
-// const data = fs.readFileSync(path.join(__dirname, "../data/places.xml"),{encoding: "utf8"});
-// lugares  = parser.parse(data)
+/**
+ * La impresión de los datos se debe de ejecutar/actualizar de igual manera cada 4 horas.
+ */
+const prices = (req,res = response) =>{ 
+     const data = fs.readFileSync(path.join(__dirname, "../data/prices.xml"),{encoding: "utf8"});
+    precios  = parser.parse(data)
 
+     const precio = precios.places.place.filter(precio => places.place["place_id"] == '11703' )
 
-const places = (req,res = response) =>{ 
-     const data = fs.readFileSync(path.join(__dirname, "../data/places.xml"),{encoding: "utf8"});
-    lugares  = parser.parse(data)
-
-     const place = lugares.places.place.filter(lugar => lugar.cre_id == 'PL/23779/EXP/ES/2021' )
-
-    return res.status(200).send({status:'success',place})
+     console.log(precios)
+    return res.status(200).send({status:'success',precio})
 };
 
+cron.schedule('* * * * * *', () => {
+    prices()
+  })
+
+
+
 module.exports = {
-    places
+    prices
 }
