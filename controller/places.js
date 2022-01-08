@@ -5,7 +5,11 @@ const https = require("https");
 const {XMLParser} = require("fast-xml-parser");
 const cron = require("node-cron");
 
-const parser = new XMLParser();
+const options = {
+    ignoreAttributes: false,
+    attributeNamePrefix : "@_"
+};
+const parser = new XMLParser(options);
 
 let precios;
 
@@ -26,16 +30,17 @@ const file = fs.createWriteStream(path.join(__dirname, "../data/prices.xml"));
 const prices = (req,res = response) =>{ 
      const data = fs.readFileSync(path.join(__dirname, "../data/prices.xml"),{encoding: "utf8"});
     precios  = parser.parse(data)
+    console.log(precios.places.place)
 
-     const precio = precios.places.place.filter(precio => places.place["place_id"] == '11703' )
+    //  const precio = precios.places.place.filter(precio => places.place["@_place_id"] == '11703' )
 
-     console.log(precios)
-    return res.status(200).send({status:'success',precio})
+    //  console.log(precios)
+    return res.status(200).send({status:'success'})
 };
 
-cron.schedule('* * * * * *', () => {
-    prices()
-  })
+// cron.schedule('* * * * * *', () => {
+//     prices()
+//   })
 
 
 
