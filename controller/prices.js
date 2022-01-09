@@ -38,6 +38,24 @@ const prices = (req,res = response) =>{
     return res.status(200).send({status:'success',precio,cantidad:precio.length})
 };
 
+
+const pricesById = (req,res) => {
+    const {id} = req.params;
+
+    const data = fs.readFileSync(path.join(__dirname, "../data/prices.xml"),{encoding: "utf8"});
+    precios  = parser.parse(data)
+
+    const precioId  = precios.places.place.filter(precio =>  precio["@_place_id"] == id );
+
+    return res.status(200).send({
+        status: "success",
+        precio:precioId
+    })
+}
+
+
+
+
 cron.schedule('* * * * *', () => {
     prices()
   })
@@ -48,6 +66,10 @@ cron.schedule('* * * * *', () => {
 
 
 
+
+
+
 module.exports = {
-    prices
+    prices,
+    pricesById
 }
