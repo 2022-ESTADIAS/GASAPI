@@ -4,9 +4,9 @@ const app = express();
 
 
 
-const placesRoutes = require('./routes/places.routes');
+const Routes = require('./routes/routes');
 
-app.use(placesRoutes);
+app.use(Routes);
 
 
 
