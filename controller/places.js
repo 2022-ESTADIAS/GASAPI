@@ -40,17 +40,67 @@ const lugaresPlaces = (req,res) =>{
     
     const precioyPlaces  = precio.filter(precio =>{
       const lugargas =  place.find(lugar => lugar['@_place_id']  == precio["@_place_id"] );
-
       precio.lugar = lugargas;
-
+        
       return precio
     })
+    
+    const arregloDefinitivo =precioyPlaces.filter(precio =>{
+      
+        // precio.tipo = {... precio['gas_price']}
 
-    console.log(precioyPlaces);
+        //manejo de llaves del objeto
+        if(precio['gas_price'][0] && precio['gas_price'][1] && precio['gas_price'][2] ){
+            precio.type = {
+                regular:{
+                    name: precio['gas_price'][0]['@_type'],
+                    price:precio['gas_price'][0]['#text']
+                },
+                premium:{
+                    name: precio['gas_price'][1]['@_type'],
+                    price:precio['gas_price'][1]['#text']
+                },
+                diesel:{
+                    name: precio['gas_price'][2]['@_type'],
+                    price:precio['gas_price'][2]['#text']
+                },
+            }
+        }else if(precio['gas_price'][0] && precio['gas_price'][1]){
+            precio.type = {
+                regular:{
+                    name: precio['gas_price'][0]['@_type'],
+                    price:precio['gas_price'][0]['#text']
+                },
+                premium:{
+                    name: precio['gas_price'][1]['@_type'],
+                    price:precio['gas_price'][1]['#text']
+                },
+            }
+        }else if(precio['gas_price'][0]){
+            precio.type = {
+              
+                regular:{
+                    name: precio['gas_price'][0]['@_type'],
+                    price:precio['gas_price'][0]['#text']
+                }
+
+            }  
+        }else{
+            precio.type ={
+                unica:{
+                    name: precio['gas_price']['@_type'],
+                    price:precio['gas_price']['#text']
+                } 
+           }
+        }
+
+        return precio
+    })
+    console.log(arregloDefinitivo);
 
      return res.status(200).send({
          status: 'success',
-         precios:precioyPlaces
+         precios:arregloDefinitivo
      }) 
 }
 
