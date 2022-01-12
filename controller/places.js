@@ -87,7 +87,7 @@ const lugaresPlaces = (req,res) =>{
             }  
         }else{
             precio.type ={
-                unica:{
+                [ precio['gas_price']['@_type']]:{
                     name: precio['gas_price']['@_type'],
                     price:precio['gas_price']['#text']
                 } 
