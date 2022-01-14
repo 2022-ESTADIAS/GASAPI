@@ -36,11 +36,11 @@ const lugaresPlaces = (req,res) =>{
     const precios  = parser.parse(data2);
 
     //acapulco
-    const place = keso(place)
+    const place = keso(places)
 
 
 
-    const precio = keso(place)
+    const precio = keso(precios)
     const precioyPlaces  = precio.filter(precio =>{
       const lugargas =  place.find(lugar => lugar['@_place_id']  == precio["@_place_id"] );
       precio.lugar = lugargas;
@@ -99,7 +99,7 @@ const lugaresPlaces = (req,res) =>{
 
         return precio
     })
-    // console.log(arregloDefinitivo);
+    // console.log('refactor ruta general');
 
      return res.status(200).send({
          status: 'success',
