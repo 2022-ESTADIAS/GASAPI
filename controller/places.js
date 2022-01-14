@@ -1,5 +1,5 @@
 const { response } = require("express");
-const {keso} = require("../helpers/filter_place_and_price")
+const {arregloPlaces} = require("../helpers/filter_place_and_price")
 const path = require("path");
 const fs = require("fs");
 const https = require("https");
@@ -25,8 +25,7 @@ const request = https.get('https://publicacionexterna.azurewebsites.net/publicac
 const lugares = (req,res = response) =>{ 
     const data = fs.readFileSync(path.join(__dirname, "../data/places.xml"),{encoding: "utf8"});
     places  = parser.parse(data)
-    const place = keso(places)
-    console.log('funcionando places [REFACTORIZADO]')
+    const place = arregloPlaces(places)
     return res.status(200).send({status:'success',place,cantidad:place.length})
 }
 const lugaresPlaces = (req,res) =>{
@@ -36,11 +35,11 @@ const lugaresPlaces = (req,res) =>{
     const precios  = parser.parse(data2);
 
     //acapulco
-    const place = keso(places)
+    const place = arregloPlaces(places)
 
 
 
-    const precio = keso(precios)
+    const precio = arregloPlaces(precios)
     const precioyPlaces  = precio.filter(precio =>{
       const lugargas =  place.find(lugar => lugar['@_place_id']  == precio["@_place_id"] );
       precio.lugar = lugargas;
@@ -99,7 +98,6 @@ const lugaresPlaces = (req,res) =>{
 
         return precio
     })
-    // console.log('refactor ruta general');
 
      return res.status(200).send({
          status: 'success',
@@ -111,3 +109,12 @@ module.exports = {
     lugares,
     lugaresPlaces
 }
+
+
+//TODO: refactor de variables.
+//TODO: Excepciones.
+//TODO: Limpiar codigo duplicado
+//TODO: Console.log innecesarios.
+//TODO: Comentarios innecesarios.
+//TODO: Documentar código.
+//TODO: Arreglar Cron.
