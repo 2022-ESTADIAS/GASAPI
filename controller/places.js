@@ -19,7 +19,7 @@ const file = fs.createWriteStream(path.join(__dirname, "../data/places.xml"));
 
 //Descargar XML places
 const request = https.get('https://publicacionexterna.azurewebsites.net/publicaciones/places',(response)=>{    
-    response.pipe(file)
+    return response.pipe(file)
 })
 
 const lugares = (req,res = response) =>{ 
