@@ -1,5 +1,5 @@
-const {arregloPrecio}  = require("../helpers/filter_place_and_price")
-
+const {arregloFiltradoPorPrecioAcapulco}  = require("../helpers/filter_place_and_price")
+const { reporteXML } = require("../helpers/writeFileXML")
 const { response } = require("express");
 const path = require("path");
 const fs = require("fs");
@@ -14,32 +14,34 @@ const options = {
 };
 const parser = new XMLParser(options);
 
-let precios;
+
+reporteXML('prices')
+
+cron.schedule('0 */4 * * *', () => {
+    reporteXML('prices')
+
+})
 
 
-const file = fs.createWriteStream(path.join(__dirname, "../data/prices.xml"));
 
- const request = https.get('https://publicacionexterna.azurewebsites.net/publicaciones/prices',(response)=>{    
-     response.pipe(file)
- })
-
-
-
-const prices = (req,res = response) =>{ 
-     const data = fs.readFileSync(path.join(__dirname, "../data/prices.xml"),{encoding: "utf8"}); //100
-    precios  = parser.parse(data)
+const Precios = (req,res = response) =>{ 
+    try{
+        const data = fs.readFileSync(path.join(__dirname, "../data/prices.xml"),{encoding: "utf8"}); //100
+        const preciosXML  = parser.parse(data)
+        const precio = arregloFiltradoPorPrecioAcapulco(preciosXML)
     
-     const precio = arregloPrecio(precios)
-
-    return res.status(200).send({status:'success',precio,cantidad:precio.length})
+        return res.status(200).send({status:'success',precio,cantidad:precio.length})
+    }catch(e){
+        return res.status(404).send({status:'error',msg: 'No se pudo leer el archivo'})
+    }
 };
 
 
-const pricesById = (req,res) => {
+const preciosPorId = (req,res) => {
     const {id} = req.params;
 
     const data = fs.readFileSync(path.join(__dirname, "../data/prices.xml"),{encoding: "utf8"});
-    precios  = parser.parse(data)
+    const precios  = parser.parse(data)
 
     const precioId  = precios.places.place.filter(precio =>  precio["@_place_id"] == id );
 
@@ -49,22 +51,7 @@ const pricesById = (req,res) => {
     })
 }
 
-
-
-/*cron.schedule('* * * * *', () => {
-    prices()
-  })*/
-
-// cron.schedule('* * * * * *', () => {
-//     request()
-// })
-
-
-
-
-
-
 module.exports = {
-    prices,
-    pricesById
+    Precios,
+    preciosPorId
 }

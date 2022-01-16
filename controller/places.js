@@ -1,8 +1,9 @@
-const { response } = require("express");
-const {arregloPlaces} = require("../helpers/filter_place_and_price")
 const path = require("path");
 const fs = require("fs");
 const https = require("https");
+const { response } = require("express");
+const {arregloFiltradoPorLugarAcapulco} = require("../helpers/filter_place_and_price")
+const { reporteXML } = require("../helpers/writeFileXML")
 const {XMLParser} = require("fast-xml-parser");
 const cron = require("node-cron");
 const options = {
@@ -12,46 +13,51 @@ const options = {
 };
 const parser = new XMLParser(options);
 
-let places
 
-//Crear ruta
-const file = fs.createWriteStream(path.join(__dirname, "../data/places.xml"));
 
-//Descargar XML places
-const request = https.get('https://publicacionexterna.azurewebsites.net/publicaciones/places',(response)=>{    
-    return response.pipe(file)
+
+reporteXML('places')
+
+cron.schedule('0 */4 * * *', () => {
+    reporteXML('places')
 })
 
-const lugares = (req,res = response) =>{ 
+
+
+//norefactor
+const cantidadLugares = (req,res = response) =>{ 
     const data = fs.readFileSync(path.join(__dirname, "../data/places.xml"),{encoding: "utf8"});
-    places  = parser.parse(data)
-    const place = arregloPlaces(places)
+    const lugaresXML  = parser.parse(data)
+    const place = arregloFiltradoPorLugarAcapulco(lugaresXML)
     return res.status(200).send({status:'success',place,cantidad:place.length})
 }
-const lugaresPlaces = (req,res) =>{
+//norefactor
+
+
+
+
+
+
+const ubicacionLugares = (req,res) =>{
+    try{
+
     const data = fs.readFileSync(path.join(__dirname, "../data/places.xml"),{encoding: "utf8"});
     const data2 = fs.readFileSync(path.join(__dirname, "../data/prices.xml"),{encoding: "utf8"});
-    places  = parser.parse(data);
-    const precios  = parser.parse(data2);
+    const lugaresXML  = parser.parse(data);
+    const preciosXML  = parser.parse(data2);
 
-    //acapulco
-    const place = arregloPlaces(places)
+    const lugar = arregloFiltradoPorLugarAcapulco(lugaresXML);
+    const precio = arregloFiltradoPorLugarAcapulco(preciosXML)
 
-
-
-    const precio = arregloPlaces(precios)
-    const precioyPlaces  = precio.filter(precio =>{
-      const lugargas =  place.find(lugar => lugar['@_place_id']  == precio["@_place_id"] );
-      precio.lugar = lugargas;
+    const precioyLugar  = precio.filter(precio =>{
+      const Gasolinera =  lugar.find(lugar => lugar['@_place_id']  == precio["@_place_id"] );
+      precio.lugar = Gasolinera;
         
       return precio
     })
     
-    const arregloDefinitivo =precioyPlaces.filter(precio =>{
+    const arregloDefinitivo =precioyLugar.filter(precio =>{
       
-        // precio.tipo = {... precio['gas_price']}
-
-        //manejo de llaves del objeto
         if(precio['gas_price'][0] && precio['gas_price'][1] && precio['gas_price'][2] ){
             precio.type = {
                 regular:{
@@ -103,18 +109,26 @@ const lugaresPlaces = (req,res) =>{
          status: 'success',
          precios:arregloDefinitivo
      }) 
+    }catch(e){
+        return res.status(404).send({status:'error',msg: 'No se pudo leer el archivo'})
+
+    }
+
 }
+
+
+
 
 module.exports = {
-    lugares,
-    lugaresPlaces
+    cantidadLugares,
+    ubicacionLugares
 }
 
 
-//TODO: refactor de variables.
-//TODO: Excepciones.
-//TODO: Limpiar codigo duplicado
-//TODO: Console.log innecesarios.
-//TODO: Comentarios innecesarios.
-//TODO: Documentar código.
-//TODO: Arreglar Cron.
+//TODO: refactor de variables. [LISTO]
+//TODO: Excepciones.[LISTO]
+//TODO: Limpiar codigo duplicado. [LISTO]
+//TODO: Console.log innecesarios. [LISTO]
+//TODO: Comentarios innecesarios. [LISTO]
+//TODO: Documentar código. [LISTO]
+//TODO: Arreglar Cron. [LISTO]

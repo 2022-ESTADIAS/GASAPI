@@ -1,12 +1,12 @@
-const { prices,pricesById} = require('../controller/prices');
-const {lugares,lugaresPlaces} = require('../controller/places')
+const { Precios,preciosPorId} = require('../controller/prices');
+const {cantidadLugares,ubicacionLugares} = require('../controller/places')
 
 const router = require('express').Router();
 
 
-router.get('/prices',prices);
-router.get('/prices/:id',pricesById);
-router.get('/places',lugares);
-router.get('/general',lugaresPlaces);
+router.get('/prices',Precios);
+router.get('/prices/:id',preciosPorId);
+router.get('/places',cantidadLugares);
+router.get('/general',ubicacionLugares);
 
 module.exports = router;
