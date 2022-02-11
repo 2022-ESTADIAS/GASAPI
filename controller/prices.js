@@ -1,4 +1,4 @@
-const {arregloFiltradoPorPrecioAcapulco}  = require("../helpers/filter_place_and_price")
+const {arregloFiltradoPorPrecioAcapulco,arregloFiltradoPorLugarAcapulco}  = require("../helpers/filter_place_and_price")
 const { reporteXML } = require("../helpers/writeFileXML")
 const { response } = require("express");
 const path = require("path");
@@ -39,15 +39,25 @@ const Precios = (req,res = response) =>{
 
 const preciosPorId = (req,res) => {
     const {id} = req.params;
+    const data = fs.readFileSync(path.join(__dirname, "../data/places.xml"),{encoding: "utf8"});
+    const data2 = fs.readFileSync(path.join(__dirname, "../data/prices.xml"),{encoding: "utf8"});
+    const lugaresXML  = parser.parse(data);
+    const preciosXML  = parser.parse(data2);
 
-    const data = fs.readFileSync(path.join(__dirname, "../data/prices.xml"),{encoding: "utf8"});
-    const precios  = parser.parse(data)
+    const lugar = arregloFiltradoPorLugarAcapulco(lugaresXML);
+    const precio = arregloFiltradoPorLugarAcapulco(preciosXML)
 
-    const precioId  = precios.places.place.filter(precio =>  precio["@_place_id"] == id );
 
+    let precioId  = precio.filter(precio =>  precio["@_place_id"] == id );
+    const  nombre = lugar.find(lugar  => lugar['@_place_id'] == id )
+    precioId.name = nombre   
     return res.status(200).send({
         status: "success",
-        precio:precioId
+        precio:precioId,
+        nombre
+        // precioyLugar
+        
+        
     })
 }
 
@@ -55,3 +65,6 @@ module.exports = {
     Precios,
     preciosPorId
 }
+
+
+    
