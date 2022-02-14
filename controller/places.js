@@ -269,26 +269,26 @@ const ubicacionLugaresUnSoloRegistro = (req,res) =>{
     
 
         }
-        else{
-            return registro
-        }
-
-        // else if( registro.lugar.cre_id.split("/")[1] == 4341 || registro.lugar.cre_id.split("/")[1] == 22575 ){
-        //     if(registro['@_place_id'] == arreglo[i+1]['@_place_id'] &&  arreglo[i+1]['@_place_id'] ==  arreglo[i+2]['@_place_id'] ){
-        //         if(registro.type.diesel){
-        //             if(arreglo[i+1].type.premium && arreglo[i+2].type.regular){
-        //                 registro.type.premium ={
-        //                    ...arreglo[i+1].type.premium,
-        //                   }
-        //                   registro.type.regular = {
-        //                    ...arreglo[i+2].type.regular,
-        //                   }
-        //             }
-        //         }
-        //         return registro
-        //     }
-        // }
-     
+        
+        else if( registro.lugar.cre_id.split("/")[1] == 4341 || registro.lugar.cre_id.split("/")[1] == 22575 ){
+            if(registro['@_place_id'] == arreglo[i+1]['@_place_id'] &&  arreglo[i+1]['@_place_id'] ==  arreglo[i+2]['@_place_id'] ){
+                if(registro.type.diesel){
+                    if(arreglo[i+1].type.premium && arreglo[i+2].type.regular){
+                        registro.type.premium ={
+                           ...arreglo[i+1].type.premium,
+                          }
+                          registro.type.regular = {
+                               ...arreglo[i+2].type.regular,
+                              }
+                        }
+                    }
+                    return registro
+                }
+            }
+            
+            else{
+                return registro
+            }
     
  
 
