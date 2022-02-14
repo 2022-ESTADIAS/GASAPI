@@ -20,3 +20,5 @@ const arregloFiltradoPorPrecioAcapulco=(p)=>{
 module.exports ={
     arregloFiltradoPorLugarAcapulco,arregloFiltradoPorPrecioAcapulco
 }
+
+

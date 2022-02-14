@@ -6,6 +6,7 @@ const {arregloFiltradoPorLugarAcapulco} = require("../helpers/filter_place_and_p
 const { reporteXML } = require("../helpers/writeFileXML")
 const {XMLParser} = require("fast-xml-parser");
 const cron = require("node-cron");
+const { promesa } = require("../helpers/promesa");
 const options = {
     ignoreAttributes: false,
     attributeNamePrefix : "@_",
@@ -184,10 +185,11 @@ const ubicacionLugaresUnSoloRegistro = (req,res) =>{
         return precio
     })
 
-    const arregloDefinitivoUnSoloRegistro =arregloDefinitivo.map((registro,i,arreglo)=>{
-        let regular = {};
-                             
-        // console.log(registro.type)
+
+
+    const arregloDefinitivoUnSoloRegistro =  arregloDefinitivo.map((registro,i,arreglo)=>{
+
+
         if(registro.lugar.cre_id.split("/")[1] == 9019 || registro.lugar.cre_id.split("/")[1] ==9016 ||
         registro.lugar.cre_id.split("/")[1] == 9012 || registro.lugar.cre_id.split("/")[1] ==8229 ||
         registro.lugar.cre_id.split("/")[1] == 7793 || registro.lugar.cre_id.split("/")[1] ==6832 ||
@@ -199,55 +201,115 @@ const ubicacionLugaresUnSoloRegistro = (req,res) =>{
         registro.lugar.cre_id.split("/")[1] == 20920 || registro.lugar.cre_id.split("/")[1] ==1206||
         registro.lugar.cre_id.split("/")[1] == 1192 || registro.lugar.cre_id.split("/")[1] ==1190 ||
         registro.lugar.cre_id.split("/")[1] == 1162 || registro.lugar.cre_id.split("/")[1] ==10951 ||
-        registro.lugar.cre_id.split("/")[1] == 10950 
-        ){
-            // console.log(registro['@_place_id'] == arreglo[i+1]['@_place_id'])
-            if(registro['@_place_id'] == arreglo[i+1]['@_place_id']){
-                if(registro.type.regular){
-                    // console.log(registro)
-                    // console.log(arreglo[i+1].type.premium)
-                     if(arreglo[i+1].type.premium && arreglo[i+1].type.diesel){
-                         registro.type.premium ={
-                            ...arreglo[i+1].type.premium,
-                           }
-                           registro.type.diesel = {
-                            ...arreglo[i+1].type.diesel,
-                           }
-                     }else if(arreglo[i+1].type.diesel){
-                        registro.type.diesel = {
-                            ...arreglo[i+1].type.diesel,
-                           }
-                     }else{
-                        registro.type.premium ={
-                            ...arreglo[i+1].type.premium,
-                           }
-                     }
-                    //  console.log(registro.type)
-                     console.log(registro)
-                }
-                // return registro
+        registro.lugar.cre_id.split("/")[1] == 10950 ||  registro.lugar.cre_id.split("/")[1] == 8664 ||
+        registro.lugar.cre_id.split("/")[1] == 5985 ||  registro.lugar.cre_id.split("/")[1] == 4577 ||
+        registro.lugar.cre_id.split("/")[1] == 4574 || registro.lugar.cre_id.split("/")[1] == 1180  
+           ){
+            
+
+        if(registro['@_place_id'] == arreglo[i+1]['@_place_id'] ){
+            if(registro.type.regular){
+           
+                 if(arreglo[i+1].type.premium && arreglo[i+1].type.diesel){
+                     registro.type.premium ={
+                        ...arreglo[i+1].type.premium,
+                       }
+                       registro.type.diesel = {
+                        ...arreglo[i+1].type.diesel,
+                       }
+                 }else if(arreglo[i+1].type.diesel){
+                    registro.type.diesel = {
+                        ...arreglo[i+1].type.diesel,
+                       }
+                 }else{
+                    registro.type.premium ={
+                        ...arreglo[i+1].type.premium,
+                       }
+                 }
+          
             }
+            else  if(registro.type.diesel){
+                 if(arreglo[i+1].type.premium && arreglo[i+1].type.regular){
+                     registro.type.premium ={
+                        ...arreglo[i+1].type.premium,
+                       }
+                       registro.type.regular = {
+                        ...arreglo[i+1].type.regular,
+                       }
+                 }else if(arreglo[i+1].type.regular){
+                    registro.type.regular = {
+                        ...arreglo[i+1].type.regular,
+                       }
+                 }else{
+                    registro.type.premium ={
+                        ...arreglo[i+1].type.premium,
+                       }
+                 }
+            }
+          
+          
+           else if(registro.type.premium){
+                 if(arreglo[i+1].type.regular && arreglo[i+1].type.diesel){
+                     registro.type.regular ={
+                        ...arreglo[i+1].type.regular,
+                       }
+                    
+                 }
+            }
+         
+
+
+
+            
 
             return registro
-        }else {
-            // return registro
-        }
-        // return registro
-
-    })
-
-
-    // console.log(arregloDefinitivoUnSoloRegistro[2])
+            // console.log(registro)
+          }     
+     
     
+
+        }
+        else{
+            return registro
+        }
+
+        // else if( registro.lugar.cre_id.split("/")[1] == 4341 || registro.lugar.cre_id.split("/")[1] == 22575 ){
+        //     if(registro['@_place_id'] == arreglo[i+1]['@_place_id'] &&  arreglo[i+1]['@_place_id'] ==  arreglo[i+2]['@_place_id'] ){
+        //         if(registro.type.diesel){
+        //             if(arreglo[i+1].type.premium && arreglo[i+2].type.regular){
+        //                 registro.type.premium ={
+        //                    ...arreglo[i+1].type.premium,
+        //                   }
+        //                   registro.type.regular = {
+        //                    ...arreglo[i+2].type.regular,
+        //                   }
+        //             }
+        //         }
+        //         return registro
+        //     }
+        // }
+     
+    
+ 
+
+    })    
+
+    const arreglofinalFinal = arregloDefinitivoUnSoloRegistro.filter(value =>value !== undefined  )
+
 
 
      return res.status(200).send({
          status: 'success',
-         precios:arregloDefinitivo
+        //   precios:arregloDefinitivo
+          precios:arreglofinalFinal,
+          cantidad: arregloDefinitivo.length,
+          cantidadUnSoloRegistro: arreglofinalFinal.length,
      }) 
 
 
     }catch(e){
+         console.log(e)
+
         return res.status(404).send({status:'error',msg: 'No se pudo leer el archivo'})
 
     }
