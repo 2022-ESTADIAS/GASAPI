@@ -7,6 +7,7 @@ const { reporteXML } = require("../helpers/writeFileXML")
 const {XMLParser} = require("fast-xml-parser");
 const cron = require("node-cron");
 const { promesa } = require("../helpers/promesa");
+const e = require("express");
 const options = {
     ignoreAttributes: false,
     attributeNamePrefix : "@_",
@@ -204,6 +205,8 @@ const ubicacionLugaresUnSoloRegistro = (req,res) =>{
         registro.lugar.cre_id.split("/")[1] == 10950 ||  registro.lugar.cre_id.split("/")[1] == 8664 ||
         registro.lugar.cre_id.split("/")[1] == 5985 ||  registro.lugar.cre_id.split("/")[1] == 4577 ||
         registro.lugar.cre_id.split("/")[1] == 4574 || registro.lugar.cre_id.split("/")[1] == 1180  
+        
+
            ){
             
 
@@ -285,6 +288,7 @@ const ubicacionLugaresUnSoloRegistro = (req,res) =>{
                     return registro
                 }
             }
+
             
             else{
                 return registro
@@ -294,16 +298,31 @@ const ubicacionLugaresUnSoloRegistro = (req,res) =>{
 
     })    
 
+    const arregloFaltante = arregloDefinitivo.filter(value =>
+        
+        {
+            if(       value.lugar.cre_id.split("/")[1] == 1162 || value.lugar.cre_id.split("/")[1]  == 1192 ||
+            value.lugar.cre_id.split("/")[1]  == 1190 || value.lugar.cre_id.split("/")[1]  == 1206 ||
+            value.lugar.cre_id.split("/")[1]  == 10951 || value.lugar.cre_id.split("/")[1]  == 1087 ||
+            value.lugar.cre_id.split("/")[1]  == 10950 ){
+                return value
+            }
+        }
+          
+       
+          )
+
+
     const arreglofinalFinal = arregloDefinitivoUnSoloRegistro.filter(value =>value !== undefined  )
 
-
+        const arregloAhoraSiEsElBueno = arreglofinalFinal.concat(arregloFaltante)
 
      return res.status(200).send({
          status: 'success',
         //   precios:arregloDefinitivo
-          precios:arreglofinalFinal,
+          precios:arregloAhoraSiEsElBueno,
           cantidad: arregloDefinitivo.length,
-          cantidadUnSoloRegistro: arreglofinalFinal.length,
+          cantidadUnSoloRegistro: arregloAhoraSiEsElBueno.length,
      }) 
 
 
