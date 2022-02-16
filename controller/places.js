@@ -6,7 +6,6 @@ const {arregloFiltradoPorLugarAcapulco} = require("../helpers/filter_place_and_p
 const { reporteXML } = require("../helpers/writeFileXML")
 const {XMLParser} = require("fast-xml-parser");
 const cron = require("node-cron");
-const { promesa } = require("../helpers/promesa");
 const e = require("express");
 const options = {
     ignoreAttributes: false,
