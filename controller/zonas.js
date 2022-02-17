@@ -2,6 +2,7 @@ const path = require("path");
 const fs = require("fs");
 const {XMLParser} = require("fast-xml-parser");
 const {arregloFiltradoPorLugarAcapulco} = require("../helpers/filter_place_and_price")
+const {registroEnUnaSolaDFila} = require("../helpers/registrosEnUnaFila")
 const options = {
     ignoreAttributes: false,
     attributeNamePrefix : "@_",
@@ -12,6 +13,10 @@ const parser = new XMLParser(options);
 const gasolinerasPorZona = (req,res)=>{
     const {zona} = req.params;
     let arregloFiltradoPorZona = [];
+    let arregloMapeadoConValoresNulos = [];
+    let registrosEnUnaSolaFila = [];
+
+    
 
     try{
 
@@ -83,97 +88,354 @@ const gasolinerasPorZona = (req,res)=>{
         switch (zona){
             //registro repetido original 6
             case 'magallanes':
-                arregloFiltradoPorZona = arregloDefinitivo.filter((gasolinera)=> 
+
+                registrosEnUnaSolaFila = arregloDefinitivo.filter((gasolinera)=> 
                 gasolinera.lugar.cre_id.split('/')[1] == 4337  || gasolinera.lugar.cre_id.split('/')[1] == 3081  ||
                 gasolinera.lugar.cre_id.split('/')[1] == 1162  || gasolinera.lugar.cre_id.split('/')[1] == 3901  ||
                 gasolinera.lugar.cre_id.split('/')[1] == 9356  || gasolinera.lugar.cre_id.split('/')[1] == 23041 
                 )
+
+                    //logica de un solo registro cuando se repite 2 veces
+                     arregloMapeadoConValoresNulos = registrosEnUnaSolaFila.map((gasolinera,i,arreglo) =>{
+                        if(gasolinera.lugar.cre_id.split('/')[1] == 1162 ){
+                            if(   i < registrosEnUnaSolaFila.length -1){
+                                
+                                const registro = registroEnUnaSolaDFila(gasolinera,i,arreglo)
+                                return registro
+                                
+                            }
+                            //logica de un solo registro cuando se repite 3 veces
+                    }else if(gasolinera.lugar.cre_id.split('/')[1] == 23041){
+                        const registro = registroEnUnaSolaDFila(gasolinera,i,arreglo,true)
+                        return registro
+                    }
+               
+                else{
+                             return gasolinera
+                         }
+
+                })
+                
+                arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
+
+
+
                 break;
                 
                 //registro repetido original 5
                 case 'coyuca':
-                    arregloFiltradoPorZona = arregloDefinitivo.filter((gasolinera)=> 
+                   registrosEnUnaSolaFila = arregloDefinitivo.filter((gasolinera)=> 
                     gasolinera.lugar.cre_id.split('/')[1] == 4263  || gasolinera.lugar.cre_id.split('/')[1] == 12908  ||
                     gasolinera.lugar.cre_id.split('/')[1] == 6980  || gasolinera.lugar.cre_id.split('/')[1] == 1180  ||
                     gasolinera.lugar.cre_id.split('/')[1] == 13644 
                     )
+                                               //logica de un solo registro cuando se repite 2 veces
+                     arregloMapeadoConValoresNulos = registrosEnUnaSolaFila.map((gasolinera,i,arreglo) =>{
+                        if(gasolinera.lugar.cre_id.split('/')[1] == 4263 || gasolinera.lugar.cre_id.split('/')[1] == 1180  
+                         ){
+                            if(   i < registrosEnUnaSolaFila.length -1){
+                                
+                                const registro = registroEnUnaSolaDFila(gasolinera,i,arreglo)
+                                return registro
+                                
+                            }
+                    }
+               
+                else{
+                             return gasolinera
+                         }
+
+                })
+                
+                arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
+
+
+
                     break;
                     
                     //registro repetido  original 7
                case 'diamante':
-                arregloFiltradoPorZona = arregloDefinitivo.filter((gasolinera)=> 
+                registrosEnUnaSolaFila = arregloDefinitivo.filter((gasolinera)=> 
                 gasolinera.lugar.cre_id.split('/')[1] == 9012  || gasolinera.lugar.cre_id.split('/')[1] == 8699  ||
                 gasolinera.lugar.cre_id.split('/')[1] == 12837 || gasolinera.lugar.cre_id.split('/')[1] == 8664  ||
                 gasolinera.lugar.cre_id.split('/')[1] == 9016  || gasolinera.lugar.cre_id.split('/')[1] == 4328  ||
                 gasolinera.lugar.cre_id.split('/')[1] == 4352  
                 )
+
+                                        //logica de un solo registro cuando se repite 2 veces
+                     arregloMapeadoConValoresNulos = registrosEnUnaSolaFila.map((gasolinera,i,arreglo) =>{
+                        if(gasolinera.lugar.cre_id.split('/')[1] == 9016 || gasolinera.lugar.cre_id.split('/')[1] == 9012  ||
+                        gasolinera.lugar.cre_id.split('/')[1] == 8664 || gasolinera.lugar.cre_id.split('/')[1] ==4352
+                         ){
+                            if(   i < registrosEnUnaSolaFila.length -1){
+                                
+                                const registro = registroEnUnaSolaDFila(gasolinera,i,arreglo)
+                                return registro
+                                
+                            }
+                    }
+               
+                else{
+                             return gasolinera
+                         }
+
+                })
+                //quitando los valores nulos del arreglo
+                arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
+
                break;
 
                             //registro repetido  original 6
                case 'llano':
-                arregloFiltradoPorZona = arregloDefinitivo.filter((gasolinera)=> 
+                registrosEnUnaSolaFila = arregloDefinitivo.filter((gasolinera)=> 
                 gasolinera.lugar.cre_id.split('/')[1] == 4289  || gasolinera.lugar.cre_id.split('/')[1] == 5985  ||
                 gasolinera.lugar.cre_id.split('/')[1] == 6888 || gasolinera.lugar.cre_id.split('/')[1] == 4765  ||
                 gasolinera.lugar.cre_id.split('/')[1] == 20920  || gasolinera.lugar.cre_id.split('/')[1] == 22162 
                 )
+
+                                                                        //logica de un solo registro cuando se repite 2 veces
+                     arregloMapeadoConValoresNulos = registrosEnUnaSolaFila.map((gasolinera,i,arreglo) =>{
+                        if(gasolinera.lugar.cre_id.split('/')[1] == 5985 || gasolinera.lugar.cre_id.split('/')[1] == 4765  ||
+                        gasolinera.lugar.cre_id.split('/')[1] == 4289 || gasolinera.lugar.cre_id.split('/')[1] ==20920
+                      
+                         ){
+                            if(   i < registrosEnUnaSolaFila.length -1){
+                                
+                                const registro = registroEnUnaSolaDFila(gasolinera,i,arreglo)
+                                return registro
+                                
+                            }
+                    }
+               
+                else{
+                             return gasolinera
+                         }
+
+                })
+                //quitando los valores nulos del arreglo
+                arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
+
                break;
 
                 //registro repetido  original 10
                case 'chilpo':
-                arregloFiltradoPorZona = arregloDefinitivo.filter((gasolinera)=> 
+               registrosEnUnaSolaFila = arregloDefinitivo.filter((gasolinera)=> 
                 gasolinera.lugar.cre_id.split('/')[1] == 19736  || gasolinera.lugar.cre_id.split('/')[1] == 1633  ||
                 gasolinera.lugar.cre_id.split('/')[1] == 1638  || gasolinera.lugar.cre_id.split('/')[1] == 8229  ||
                 gasolinera.lugar.cre_id.split('/')[1] == 10726  || gasolinera.lugar.cre_id.split('/')[1] == 6887 ||
                 gasolinera.lugar.cre_id.split('/')[1] == 20003  || gasolinera.lugar.cre_id.split('/')[1] == 22049 ||
                 gasolinera.lugar.cre_id.split('/')[1] == 8327  || gasolinera.lugar.cre_id.split('/')[1] == 6059 
                 )
+
+                  //logica de un solo registro cuando se repite 3 veces
+                  arregloMapeadoConValoresNulos = registrosEnUnaSolaFila.map((gasolinera,i,arreglo) =>{
+                     if(gasolinera.lugar.cre_id.split('/')[1] == 8229){
+                    const registro = registroEnUnaSolaDFila(gasolinera,i,arreglo,true)
+                    return registro
+                }
+           
+            else{
+                         return gasolinera
+                     }
+
+            })
+            arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
+
                break;
 
                       //registro repetido  original 5
                case 'rena':
-                arregloFiltradoPorZona = arregloDefinitivo.filter((gasolinera)=> 
+                registrosEnUnaSolaFila = arregloDefinitivo.filter((gasolinera)=> 
                 gasolinera.lugar.cre_id.split('/')[1] == 4332  || gasolinera.lugar.cre_id.split('/')[1] == 2942  ||
                 gasolinera.lugar.cre_id.split('/')[1] == 9588  || gasolinera.lugar.cre_id.split('/')[1] == 1192  ||
                 gasolinera.lugar.cre_id.split('/')[1] == 1190   
                 )
+
+                                                        //logica de un solo registro cuando se repite 2 veces
+                     arregloMapeadoConValoresNulos = registrosEnUnaSolaFila.map((gasolinera,i,arreglo) =>{
+                        if(gasolinera.lugar.cre_id.split('/')[1] == 9588 || gasolinera.lugar.cre_id.split('/')[1] == 4332  ||
+                        gasolinera.lugar.cre_id.split('/')[1] == 2942 || gasolinera.lugar.cre_id.split('/')[1] ==1192
+                        || gasolinera.lugar.cre_id.split('/')[1] ==1190
+                         ){
+                            if(   i < registrosEnUnaSolaFila.length -1){
+                                
+                                const registro = registroEnUnaSolaDFila(gasolinera,i,arreglo)
+                                return registro
+                                
+                            }
+                    }
+               
+                else{
+                             return gasolinera
+                         }
+
+                })
+                //quitando los valores nulos del arreglo
+                arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
+
+
                break;   
 
                case 'muller':
-                arregloFiltradoPorZona = arregloDefinitivo.filter((gasolinera)=> 
+                registrosEnUnaSolaFila= arregloDefinitivo.filter((gasolinera)=> 
                 gasolinera.lugar.cre_id.split('/')[1] == 6409  || gasolinera.lugar.cre_id.split('/')[1] == 13058  
-      
                 )
+
+                                         //logica de un solo registro cuando se repite 2 veces
+                     arregloMapeadoConValoresNulos = registrosEnUnaSolaFila.map((gasolinera,i,arreglo) =>{
+                        if(gasolinera.lugar.cre_id.split('/')[1] == 13058 ){
+                            if(   i < registrosEnUnaSolaFila.length -1){
+                                
+                                const registro = registroEnUnaSolaDFila(gasolinera,i,arreglo)
+                                return registro
+                                
+                            }
+                    }
+               
+                else{
+                             return gasolinera
+                         }
+
+                })
+                //quitando los valores nulos del arreglo
+                arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
+
+                
                break;
                  //registro repetido  original 6
                case 'servifer':
-                arregloFiltradoPorZona = arregloDefinitivo.filter((gasolinera)=> 
+                registrosEnUnaSolaFila= arregloDefinitivo.filter((gasolinera)=> 
                 gasolinera.lugar.cre_id.split('/')[1] == 4317  || gasolinera.lugar.cre_id.split('/')[1] == 4770  ||
                 gasolinera.lugar.cre_id.split('/')[1] == 3644  || gasolinera.lugar.cre_id.split('/')[1] == 7528  ||
                 gasolinera.lugar.cre_id.split('/')[1] == 6832  || gasolinera.lugar.cre_id.split('/')[1] == 7793
                 )
+                
+                
+                                         //logica de un solo registro cuando se repite 2 veces
+                     arregloMapeadoConValoresNulos = registrosEnUnaSolaFila.map((gasolinera,i,arreglo) =>{
+                        if(gasolinera.lugar.cre_id.split('/')[1] == 7793  || gasolinera.lugar.cre_id.split('/')[1] == 6832
+                        || gasolinera.lugar.cre_id.split('/')[1] == 4770 || gasolinera.lugar.cre_id.split('/')[1] == 4317
+                        ){
+                            if(   i < registrosEnUnaSolaFila.length -1){
+                                
+                                const registro = registroEnUnaSolaDFila(gasolinera,i,arreglo)
+                                return registro
+                                
+                            }
+                    }
+               
+                else{
+                             return gasolinera
+                         }
+
+                })
+                //quitando los valores nulos del arreglo
+                arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
+
                break;  
 
                //registro repetido  original 9
                case 'cruz-grande':
-                arregloFiltradoPorZona = arregloDefinitivo.filter((gasolinera)=> 
+                registrosEnUnaSolaFila= arregloDefinitivo.filter((gasolinera)=> 
                 gasolinera.lugar.cre_id.split('/')[1] == 22575  || gasolinera.lugar.cre_id.split('/')[1] == 4341  ||
                 gasolinera.lugar.cre_id.split('/')[1] == 21109  || gasolinera.lugar.cre_id.split('/')[1] == 8438  ||
                 gasolinera.lugar.cre_id.split('/')[1] == 8441  || gasolinera.lugar.cre_id.split('/')[1] == 8424 ||
                 gasolinera.lugar.cre_id.split('/')[1] == 4577  || gasolinera.lugar.cre_id.split('/')[1] == 4574 ||
                 gasolinera.lugar.cre_id.split('/')[1] == 8420
                 )
-               break;  
 
+                                    //logica de un solo registro cuando se repite 2 veces
+                     arregloMapeadoConValoresNulos = registrosEnUnaSolaFila.map((gasolinera,i,arreglo) =>{
+                        if(gasolinera.lugar.cre_id.split('/')[1] == 4577 || gasolinera.lugar.cre_id.split('/')[1] == 4574  ){
+                            if(   i < registrosEnUnaSolaFila.length -1){
+                                
+                                const registro = registroEnUnaSolaDFila(gasolinera,i,arreglo)
+                                return registro
+                                
+                            }
+                            //logica de un solo registro cuando se repite 3 veces
+                    }else if(gasolinera.lugar.cre_id.split('/')[1] == 22575 || gasolinera.lugar.cre_id.split('/')[1] == 4341 ){
+                        const registro = registroEnUnaSolaDFila(gasolinera,i,arreglo,true)
+                        return registro
+                    }
+               
+                else{
+                             return gasolinera
+                         }
+
+                })
+                
+                arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
+
+               break;  
+            //registro repetido  original 10
                case 'ejido-modelo':
-                arregloFiltradoPorZona = arregloDefinitivo.filter((gasolinera)=> 
+                registrosEnUnaSolaFila = arregloDefinitivo.filter((gasolinera)=> 
                 gasolinera.lugar.cre_id.split('/')[1] == 11270  || gasolinera.lugar.cre_id.split('/')[1] == 1206  ||
                 gasolinera.lugar.cre_id.split('/')[1] == 1535  || gasolinera.lugar.cre_id.split('/')[1] == 10951  ||
                 gasolinera.lugar.cre_id.split('/')[1] == 22646  || gasolinera.lugar.cre_id.split('/')[1] == 5537 ||
                 gasolinera.lugar.cre_id.split('/')[1] == 1453  || gasolinera.lugar.cre_id.split('/')[1] == 1087 ||
                 gasolinera.lugar.cre_id.split('/')[1] == 4334  || gasolinera.lugar.cre_id.split('/')[1] == 6355
                 )
+                
+                                    //logica de un solo registro cuando se repite 2 veces
+                     arregloMapeadoConValoresNulos = registrosEnUnaSolaFila.map((gasolinera,i,arreglo) =>{
+                        if(gasolinera.lugar.cre_id.split('/')[1] == 1535  || gasolinera.lugar.cre_id.split('/')[1] == 1206
+                        || gasolinera.lugar.cre_id.split('/')[1] == 10951 || gasolinera.lugar.cre_id.split('/')[1] == 1087
+                        ){
+                            if(   i < registrosEnUnaSolaFila.length -1){
+                                
+                                const registro = registroEnUnaSolaDFila(gasolinera,i,arreglo)
+                                return registro
+                                
+                            }
+                    }
+               
+                else{
+                             return gasolinera
+                         }
+
+                })
+                //quitando los valores nulos del arreglo
+                arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
+
                break; 
 
+               case 'costera-diana':
+                registrosEnUnaSolaFila = arregloDefinitivo.filter((gasolinera)=> 
+                gasolinera.lugar.cre_id.split('/')[1] == 4339  || gasolinera.lugar.cre_id.split('/')[1] == 1151  ||
+                gasolinera.lugar.cre_id.split('/')[1] == 10950  || gasolinera.lugar.cre_id.split('/')[1] == 9019  ||
+                gasolinera.lugar.cre_id.split('/')[1] == 19967  
+                )
+
+                                           //logica de un solo registro cuando se repite 2 veces
+                     arregloMapeadoConValoresNulos = registrosEnUnaSolaFila.map((gasolinera,i,arreglo) =>{
+                        if(gasolinera.lugar.cre_id.split('/')[1] == 9019  || gasolinera.lugar.cre_id.split('/')[1] == 4339
+                        || gasolinera.lugar.cre_id.split('/')[1] == 10950 
+                        ){
+                            if(   i < registrosEnUnaSolaFila.length -1){
+                                
+                                const registro = registroEnUnaSolaDFila(gasolinera,i,arreglo)
+                                return registro
+                                
+                            }
+                    }
+               
+                else{
+                             return gasolinera
+                         }
+
+                })
+                //quitando los valores nulos del arreglo
+                arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
+
+               break; 
+
+               default:
+                return res.status(404).send({
+                    status: 'error',
+                    msg:"La zona no existe"
+                }) 
 
 
         }
