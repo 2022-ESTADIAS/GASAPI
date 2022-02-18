@@ -1,5 +1,13 @@
 const registroEnUnaSolaDFila = (registro,i,arreglo,tres= false)  =>{    
 
+    
+   const arregloDeUnSoloElemento= arreglo.filter(valor  => valor.lugar.cre_id.split('/')[1] == registro.lugar.cre_id.split("/")[1]  );
+
+
+   if(arregloDeUnSoloElemento.length ==1){
+       return registro
+   }
+
 
     if(registro['@_place_id'] == arreglo[i+1]['@_place_id']  && !tres ){
         if(registro.type.regular){
@@ -15,14 +23,14 @@ const registroEnUnaSolaDFila = (registro,i,arreglo,tres= false)  =>{
                 registro.type.diesel = {
                     ...arreglo[i+1].type.diesel,
                    }
-             }else{
+             }else if(arreglo[i+1].type.premium) {
                 registro.type.premium ={
                     ...arreglo[i+1].type.premium,
                    }
              }
-      
-        }
-        else  if(registro.type.diesel){
+             
+            }
+            else  if(registro.type.diesel){
              if(arreglo[i+1].type.premium && arreglo[i+1].type.regular){
                  registro.type.premium ={
                     ...arreglo[i+1].type.premium,
@@ -37,10 +45,10 @@ const registroEnUnaSolaDFila = (registro,i,arreglo,tres= false)  =>{
              }else{
                 registro.type.premium ={
                     ...arreglo[i+1].type.premium,
-                   }
-             }
+                }
+            }
         }
-      
+        
       
        else if(registro.type.premium){
              if(arreglo[i+1].type.regular && arreglo[i+1].type.diesel){
@@ -87,9 +95,11 @@ const registroEnUnaSolaDFila = (registro,i,arreglo,tres= false)  =>{
                           }
                     }
             }
-            return registro
-        }
 
+    
+
+            return registro
+        } 
 }
 
 module.exports ={

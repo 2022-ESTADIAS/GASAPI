@@ -410,7 +410,8 @@ const gasolinerasPorZona = (req,res)=>{
 
                                            //logica de un solo registro cuando se repite 2 veces
                      arregloMapeadoConValoresNulos = registrosEnUnaSolaFila.map((gasolinera,i,arreglo) =>{
-                        if(gasolinera.lugar.cre_id.split('/')[1] == 9019  || gasolinera.lugar.cre_id.split('/')[1] == 4339
+                         console.log( gasolinera.lugar.cre_id.split('/')[1]);
+                        if( gasolinera.lugar.cre_id.split('/')[1] == 4339  ||  gasolinera.lugar.cre_id.split('/')[1] == 9019 
                         || gasolinera.lugar.cre_id.split('/')[1] == 10950 
                         ){
                             if(   i < registrosEnUnaSolaFila.length -1){
