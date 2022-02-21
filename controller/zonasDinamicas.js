@@ -112,17 +112,21 @@ const gasolinerasPorZonaDinamica = (req,res)=>{
     
                     })
                 
-                arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
-                eliminandoDuplicados = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined ).filter( (gasolinera,i,arreglo)=>{
+                // arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
+            
+                eliminandoDuplicados = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined ).reverse().filter( (gasolinera,i,arreglo)=>{
                     if(i < arreglo.length -1){
-                        if(gasolinera.lugar.cre_id.split('/')[1] == arreglo[i+1].lugar.cre_id.split('/')[1] ){
-                          return gasolinera
+                        if(gasolinera.lugar.cre_id.split('/')[1] != arreglo[i+1].lugar.cre_id.split('/')[1] ){
+                            return gasolinera
                         }
-                      
-                  }
-              })
-
-                     arregloFiltradoPorZona =  eliminandoDuplicados;
+                    }
+                    else{
+                        return gasolinera
+                    }
+                })
+                
+                
+                arregloFiltradoPorZona = eliminandoDuplicados;
 
 
                 break;
@@ -149,7 +153,21 @@ const gasolinerasPorZonaDinamica = (req,res)=>{
     
                     })
                 
-                arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
+                // arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
+
+                eliminandoDuplicados = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined ).reverse().filter( (gasolinera,i,arreglo)=>{
+                    if(i < arreglo.length -1){
+                        if(gasolinera.lugar.cre_id.split('/')[1] != arreglo[i+1].lugar.cre_id.split('/')[1] ){
+                            return gasolinera
+                        }
+                    }
+                    else{
+                        return gasolinera
+                    }
+                })
+                
+                
+                arregloFiltradoPorZona = eliminandoDuplicados;
 
 
 
@@ -179,7 +197,21 @@ const gasolinerasPorZonaDinamica = (req,res)=>{
     
                     })
                 //quitando los valores nulos del arreglo
-                arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
+                // arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
+                eliminandoDuplicados = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined ).reverse().filter( (gasolinera,i,arreglo)=>{
+                    if(i < arreglo.length -1){
+                        if(gasolinera.lugar.cre_id.split('/')[1] != arreglo[i+1].lugar.cre_id.split('/')[1] ){
+                            return gasolinera
+                        }
+                    }
+                    else{
+                        return gasolinera
+                    }
+                })
+                
+                
+                arregloFiltradoPorZona = eliminandoDuplicados;
+
 
                break;
 
@@ -206,7 +238,21 @@ const gasolinerasPorZonaDinamica = (req,res)=>{
 
                 })
                 //quitando los valores nulos del arreglo
-                arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
+                // arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
+
+                eliminandoDuplicados = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined ).reverse().filter( (gasolinera,i,arreglo)=>{
+                    if(i < arreglo.length -1){
+                        if(gasolinera.lugar.cre_id.split('/')[1] != arreglo[i+1].lugar.cre_id.split('/')[1] ){
+                            return gasolinera
+                        }
+                    }
+                    else{
+                        return gasolinera
+                    }
+                })
+                
+                
+                arregloFiltradoPorZona = eliminandoDuplicados;
 
                break;
 
@@ -234,7 +280,21 @@ else{
 
 })
             //quitando los valores nulos del arreglo
-            arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
+            // arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
+
+            eliminandoDuplicados = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined ).reverse().filter( (gasolinera,i,arreglo)=>{
+                if(i < arreglo.length -1){
+                    if(gasolinera.lugar.cre_id.split('/')[1] != arreglo[i+1].lugar.cre_id.split('/')[1] ){
+                        return gasolinera
+                    }
+                }
+                else{
+                    return gasolinera
+                }
+            })
+            
+            
+            arregloFiltradoPorZona = eliminandoDuplicados;
 
             
 
@@ -263,11 +323,26 @@ else{
 
         })
                 //quitando los valores nulos del arreglo
-                arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
+                // arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
+
+                
+            eliminandoDuplicados = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined ).reverse().filter( (gasolinera,i,arreglo)=>{
+                if(i < arreglo.length -1){
+                    if(gasolinera.lugar.cre_id.split('/')[1] != arreglo[i+1].lugar.cre_id.split('/')[1] ){
+                        return gasolinera
+                    }
+                }
+                else{
+                    return gasolinera
+                }
+            })
+            
+            
+            arregloFiltradoPorZona = eliminandoDuplicados;
 
 
                break;   
-
+                //original 2
                case 'muller':
                 registrosEnUnaSolaFila= arregloDefinitivo.filter((gasolinera)=> 
                 gasolinera.lugar.cre_id.split('/')[1] == 6409  || gasolinera.lugar.cre_id.split('/')[1] == 13058  
@@ -287,7 +362,20 @@ else{
 
     })
                 //quitando los valores nulos del arreglo
-                arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
+                // arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
+                eliminandoDuplicados = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined ).reverse().filter( (gasolinera,i,arreglo)=>{
+                    if(i < arreglo.length -1){
+                        if(gasolinera.lugar.cre_id.split('/')[1] != arreglo[i+1].lugar.cre_id.split('/')[1] ){
+                            return gasolinera
+                        }
+                    }
+                    else{
+                        return gasolinera
+                    }
+                })
+                
+                
+                arregloFiltradoPorZona = eliminandoDuplicados;
 
                 
                break;
@@ -315,7 +403,20 @@ else{
 
     })
                 //quitando los valores nulos del arreglo
-                arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
+                // arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
+                eliminandoDuplicados = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined ).reverse().filter( (gasolinera,i,arreglo)=>{
+                    if(i < arreglo.length -1){
+                        if(gasolinera.lugar.cre_id.split('/')[1] != arreglo[i+1].lugar.cre_id.split('/')[1] ){
+                            return gasolinera
+                        }
+                    }
+                    else{
+                        return gasolinera
+                    }
+                })
+                
+                
+                arregloFiltradoPorZona = eliminandoDuplicados;
 
                break;  
 
@@ -344,7 +445,20 @@ else{
 
     })
                 
-                arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
+                // arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
+                eliminandoDuplicados = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined ).reverse().filter( (gasolinera,i,arreglo)=>{
+                    if(i < arreglo.length -1){
+                        if(gasolinera.lugar.cre_id.split('/')[1] != arreglo[i+1].lugar.cre_id.split('/')[1] ){
+                            return gasolinera
+                        }
+                    }
+                    else{
+                        return gasolinera
+                    }
+                })
+                
+                
+                arregloFiltradoPorZona = eliminandoDuplicados;
 
                break;  
             //registro repetido  original 10
@@ -371,7 +485,20 @@ else{
     
         })
                     
-                    arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
+                    // arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
+                          eliminandoDuplicados = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined ).reverse().filter( (gasolinera,i,arreglo)=>{
+                    if(i < arreglo.length -1){
+                        if(gasolinera.lugar.cre_id.split('/')[1] != arreglo[i+1].lugar.cre_id.split('/')[1] ){
+                            return gasolinera
+                        }
+                    }
+                    else{
+                        return gasolinera
+                    }
+                })
+                
+                
+                arregloFiltradoPorZona = eliminandoDuplicados;            
                break; 
 
                case 'costera-diana':
@@ -401,7 +528,20 @@ else{
 
                 })
                 //quitando los valores nulos del arreglo
-                arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
+                // arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
+                eliminandoDuplicados = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined ).reverse().filter( (gasolinera,i,arreglo)=>{
+                    if(i < arreglo.length -1){
+                        if(gasolinera.lugar.cre_id.split('/')[1] != arreglo[i+1].lugar.cre_id.split('/')[1] ){
+                            return gasolinera
+                        }
+                    }
+                    else{
+                        return gasolinera
+                    }
+                })
+                
+                
+                arregloFiltradoPorZona = eliminandoDuplicados;   
 
                break; 
 

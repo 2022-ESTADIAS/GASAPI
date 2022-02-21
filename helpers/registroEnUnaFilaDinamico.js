@@ -28,7 +28,7 @@ const registroEnUnaSolaFilaDinamico = (registro,i,arreglo)  =>{
                      ...arreglo[i+1].type.premium,
                     }
               }
-              return registro
+            //   return registro
              }
              else  if(registro.type.diesel){
                  //validacion 3 registros repetidos
@@ -48,7 +48,7 @@ const registroEnUnaSolaFilaDinamico = (registro,i,arreglo)  =>{
                           registro.type.regular = {
                                ...arreglo[i+2].type.regular,
                               }
-                              return registro
+                            //   return registro
                         }
    
                 }  
@@ -70,7 +70,7 @@ const registroEnUnaSolaFilaDinamico = (registro,i,arreglo)  =>{
                      ...arreglo[i+1].type.premium,
                  }
              }
-             return registro
+            //  return registro
          }
          
        
@@ -85,7 +85,7 @@ const registroEnUnaSolaFilaDinamico = (registro,i,arreglo)  =>{
                      ...arreglo[i+1].type.regular,
                     }
               }
-              return registro
+            //   return registro
          }
       
  
@@ -112,7 +112,7 @@ const registroEnUnaSolaFilaDinamico = (registro,i,arreglo)  =>{
                            }
                      }
 
-                     return registro
+                    //  return registro
              } 
            if(registro.type.regular){
                  if(arreglo[i+1].type.diesel && arreglo[i+2].type.premium){
@@ -123,7 +123,7 @@ const registroEnUnaSolaFilaDinamico = (registro,i,arreglo)  =>{
                             ...arreglo[i+1].type.diesel,
                            }
                      }
-                     return registro
+                    //  return registro
              }
  
      
