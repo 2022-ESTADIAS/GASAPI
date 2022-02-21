@@ -1,4 +1,4 @@
-const registroEnUnaSolaDFila = (registro,i,arreglo,tres= false)  =>{    
+const registroEnUnaSolaFilaDinamico = (registro,i,arreglo)  =>{    
 
     
     const arregloDeUnSoloElemento= arreglo.filter(valor  => valor.lugar.cre_id.split('/')[1] == registro.lugar.cre_id.split("/")[1]  );
@@ -9,7 +9,7 @@ const registroEnUnaSolaDFila = (registro,i,arreglo,tres= false)  =>{
     }
  
  
-     if(registro['@_place_id'] == arreglo[i+1]['@_place_id']  && !tres ){
+     if(registro['@_place_id'] == arreglo[i+1]['@_place_id']  ){
          if(registro.type.regular){
         
               if(arreglo[i+1].type.premium && arreglo[i+1].type.diesel){
@@ -28,9 +28,32 @@ const registroEnUnaSolaDFila = (registro,i,arreglo,tres= false)  =>{
                      ...arreglo[i+1].type.premium,
                     }
               }
-              
+              return registro
              }
              else  if(registro.type.diesel){
+                 //validacion 3 registros repetidos
+             if(registro['@_place_id'] == arreglo[i+1]['@_place_id'] &&  registro['@_place_id'] ==  arreglo[i+2]['@_place_id']){
+                if(arreglo[i+1].type.regular && arreglo[i+2].type.premium){
+                    registro.type.premium ={
+                       ...arreglo[i+2].type.premium,
+                      }
+                      registro.type.regular = {
+                           ...arreglo[i+1].type.regular,
+                          }
+                    }
+                    else   if(arreglo[i+1].type.premium && arreglo[i+2].type.regular){
+                        registro.type.premium ={
+                           ...arreglo[i+1].type.premium,
+                          }
+                          registro.type.regular = {
+                               ...arreglo[i+2].type.regular,
+                              }
+                              return registro
+                        }
+   
+                }  
+
+                //validacion 2 registros repetidos
               if(arreglo[i+1].type.premium && arreglo[i+1].type.regular){
                   registro.type.premium ={
                      ...arreglo[i+1].type.premium,
@@ -47,6 +70,7 @@ const registroEnUnaSolaDFila = (registro,i,arreglo,tres= false)  =>{
                      ...arreglo[i+1].type.premium,
                  }
              }
+             return registro
          }
          
        
@@ -61,13 +85,16 @@ const registroEnUnaSolaDFila = (registro,i,arreglo,tres= false)  =>{
                      ...arreglo[i+1].type.regular,
                     }
               }
+              return registro
          }
       
  
          return registro
          // console.log(registro)
-       }     else if(registro['@_place_id'] == arreglo[i+1]['@_place_id'] &&  arreglo[i+1]['@_place_id'] ==  arreglo[i+2]['@_place_id']  && tres){
+       }    
+        else if(registro['@_place_id'] == arreglo[i+1]['@_place_id'] &&  registro['@_place_id'] ==  arreglo[i+2]['@_place_id'] ){
          if(registro.type.diesel){
+             console.log("Si entra en esta validacion")
              if(arreglo[i+1].type.regular && arreglo[i+2].type.premium){
                  registro.type.premium ={
                     ...arreglo[i+2].type.premium,
@@ -84,6 +111,8 @@ const registroEnUnaSolaDFila = (registro,i,arreglo,tres= false)  =>{
                             ...arreglo[i+2].type.regular,
                            }
                      }
+
+                     return registro
              } 
            if(registro.type.regular){
                  if(arreglo[i+1].type.diesel && arreglo[i+2].type.premium){
@@ -94,6 +123,7 @@ const registroEnUnaSolaDFila = (registro,i,arreglo,tres= false)  =>{
                             ...arreglo[i+1].type.diesel,
                            }
                      }
+                     return registro
              }
  
      
@@ -103,5 +133,5 @@ const registroEnUnaSolaDFila = (registro,i,arreglo,tres= false)  =>{
  }
  
  module.exports ={
-     registroEnUnaSolaDFila
+     registroEnUnaSolaFilaDinamico
  }
