@@ -11,7 +11,25 @@ const registroEnUnaSolaFilaDinamico = (registro,i,arreglo)  =>{
  
      if(registro['@_place_id'] == arreglo[i+1]['@_place_id']  ){
          if(registro.type.regular){
-        
+             const tercerRegistro =  arreglo[i+2] ?  arreglo[i+2]['@_place_id']:false 
+
+                                    //validacion 3 registros
+      if(registro['@_place_id'] == arreglo[i+1]['@_place_id'] &&  registro['@_place_id'] == tercerRegistro  ){
+        if(arreglo[i+2].type.premium && arreglo[i+1].type.diesel){
+            registro.type.premium ={
+               ...arreglo[i+2].type.premium,
+              }
+              registro.type.diesel = {
+                   ...arreglo[i+1].type.diesel,
+                  }
+            } else if(arreglo[i+2].type.premium){
+                registro.type.premium ={
+                    ...arreglo[i+2].type.premium,
+                   }
+            }
+     } 
+
+    
               if(arreglo[i+1].type.premium && arreglo[i+1].type.diesel){
                   registro.type.premium ={
                      ...arreglo[i+1].type.premium,
@@ -28,7 +46,9 @@ const registroEnUnaSolaFilaDinamico = (registro,i,arreglo)  =>{
                      ...arreglo[i+1].type.premium,
                     }
               }
-            //   return registro
+    
+
+
              }
              else  if(registro.type.diesel){
                  //validacion 3 registros repetidos
@@ -50,6 +70,7 @@ const registroEnUnaSolaFilaDinamico = (registro,i,arreglo)  =>{
                               }
                             //   return registro
                         }
+                      
    
                 }  
 
@@ -92,6 +113,9 @@ const registroEnUnaSolaFilaDinamico = (registro,i,arreglo)  =>{
          return registro
          // console.log(registro)
        }    
+
+       
+
         else if(registro['@_place_id'] == arreglo[i+1]['@_place_id'] &&  registro['@_place_id'] ==  arreglo[i+2]['@_place_id'] ){
          if(registro.type.diesel){
              console.log("Si entra en esta validacion")
