@@ -256,14 +256,16 @@ const gasolinerasPorZonaDinamica = (req,res)=>{
 
                break;
 
-                //registro repetido  original 10
+                //registro repetido  original 13
                case 'chilpo':
                registrosEnUnaSolaFila = arregloDefinitivo.filter((gasolinera)=> 
                 gasolinera.lugar.cre_id.split('/')[1] == 19736  || gasolinera.lugar.cre_id.split('/')[1] == 1633  ||
                 gasolinera.lugar.cre_id.split('/')[1] == 1638  || gasolinera.lugar.cre_id.split('/')[1] == 8229  ||
                 gasolinera.lugar.cre_id.split('/')[1] == 10726  || gasolinera.lugar.cre_id.split('/')[1] == 6887 ||
                 gasolinera.lugar.cre_id.split('/')[1] == 20003  || gasolinera.lugar.cre_id.split('/')[1] == 22049 ||
-                gasolinera.lugar.cre_id.split('/')[1] == 8327  || gasolinera.lugar.cre_id.split('/')[1] == 6059 
+                gasolinera.lugar.cre_id.split('/')[1] == 8327  || gasolinera.lugar.cre_id.split('/')[1] == 6059 || 
+                gasolinera.lugar.cre_id.split('/')[1] == 4349  || gasolinera.lugar.cre_id.split('/')[1] == 4377 ||
+                gasolinera.lugar.cre_id.split('/')[1] == 19221
                 )
       //logica de un solo registro cuando se repite 2 veces
       arregloMapeadoConValoresNulos = registrosEnUnaSolaFila.map((gasolinera,i,arreglo) =>{
@@ -342,10 +344,11 @@ else{
 
 
                break;   
-                //original 2
+                //original 3
                case 'muller':
                 registrosEnUnaSolaFila= arregloDefinitivo.filter((gasolinera)=> 
-                gasolinera.lugar.cre_id.split('/')[1] == 6409  || gasolinera.lugar.cre_id.split('/')[1] == 13058  
+                gasolinera.lugar.cre_id.split('/')[1] == 6409  || gasolinera.lugar.cre_id.split('/')[1] == 13058 ||
+                gasolinera.lugar.cre_id.split('/')[1] == 4287
                 )
          //logica de un solo registro cuando se repite 2 veces
          arregloMapeadoConValoresNulos = registrosEnUnaSolaFila.map((gasolinera,i,arreglo) =>{
@@ -505,7 +508,7 @@ else{
                 registrosEnUnaSolaFila = arregloDefinitivo.filter((gasolinera)=> 
                 gasolinera.lugar.cre_id.split('/')[1] == 4339  || gasolinera.lugar.cre_id.split('/')[1] == 1151  ||
                 gasolinera.lugar.cre_id.split('/')[1] == 10950  || gasolinera.lugar.cre_id.split('/')[1] == 9019  ||
-                gasolinera.lugar.cre_id.split('/')[1] == 19967  
+                gasolinera.lugar.cre_id.split('/')[1] == 19967  || gasolinera.lugar.cre_id.split('/')[1] == 4353
                 )
 
                                            //logica de un solo registro cuando se repite 2 veces
