@@ -1,12 +1,14 @@
 const registroEnUnaSolaFilaDinamico = (registro,i,arreglo)  =>{    
 
+ 
     
     const arregloDeUnSoloElemento= arreglo.filter(valor  => valor.lugar.cre_id.split('/')[1] == registro.lugar.cre_id.split("/")[1]  );
  
- 
-    if(arregloDeUnSoloElemento.length ==1){
+    if(arregloDeUnSoloElemento.length == 1 ){
         return registro
     }
+
+ 
  
  
      if(registro['@_place_id'] == arreglo[i+1]['@_place_id']  ){
@@ -96,6 +98,30 @@ const registroEnUnaSolaFilaDinamico = (registro,i,arreglo)  =>{
          
        
         else if(registro.type.premium){
+            const tercerRegistro =  arreglo[i+2] ?  arreglo[i+2]['@_place_id']:false 
+
+            //validacion 3 registros
+if(registro['@_place_id'] == arreglo[i+1]['@_place_id'] &&  registro['@_place_id'] == tercerRegistro  ){
+    if( arreglo[i+1].type.diesel &&  arreglo[i+2].type.regular){
+
+        registro.type.diesel ={
+            ...arreglo[i+1].type.diesel,
+           }
+
+           registro.type.regular ={
+            ...arreglo[i+2].type.regular,
+           }
+    }   else if(arreglo[i+1].type.diesel){
+        registro.type.diesel ={
+            ...arreglo[i+1].type.diesel,
+           }
+    } else if(arreglo[i+2].type.regular){
+        registro.type.regular ={
+            ...arreglo[i+2].type.regular,
+           }
+    }
+}
+
               if(arreglo[i+1].type.regular && arreglo[i+1].type.diesel){
                   registro.type.regular ={
                      ...arreglo[i+1].type.regular,
