@@ -54,7 +54,9 @@ const registroEnUnaSolaFilaDinamico = (registro,i,arreglo)  =>{
              }
              else  if(registro.type.diesel){
                  //validacion 3 registros repetidos
-             if(registro['@_place_id'] == arreglo[i+1]['@_place_id'] &&  registro['@_place_id'] ==  arreglo[i+2]['@_place_id']){
+                 const tercerRegistro =  arreglo[i+2] ?  arreglo[i+2]['@_place_id']:false 
+
+             if(registro['@_place_id'] == arreglo[i+1]['@_place_id'] &&  registro['@_place_id'] == tercerRegistro){
                 if(arreglo[i+1].type.regular && arreglo[i+2].type.premium){
                     registro.type.premium ={
                        ...arreglo[i+2].type.premium,

@@ -529,8 +529,6 @@ else{
 
             })
         
-        // arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
-    
         eliminandoDuplicados = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined ).reverse().filter( (gasolinera,i,arreglo)=>{
             if(i < arreglo.length -1){
                 if(gasolinera.lugar.cre_id.split('/')[1] != arreglo[i+1].lugar.cre_id.split('/')[1] ){
