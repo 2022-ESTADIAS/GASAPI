@@ -28,6 +28,10 @@ const registroEnUnaSolaFilaDinamico = (registro,i,arreglo)  =>{
                 registro.type.premium ={
                     ...arreglo[i+2].type.premium,
                    }
+            }else if(arreglo[i+2].type.diesel){ 
+                registro.type.diesel ={
+                    ...arreglo[i+2].type.diesel,
+                   }
             }
      } 
 
@@ -104,6 +108,8 @@ const registroEnUnaSolaFilaDinamico = (registro,i,arreglo)  =>{
 
             //validacion 3 registros
 if(registro['@_place_id'] == arreglo[i+1]['@_place_id'] &&  registro['@_place_id'] == tercerRegistro  ){
+
+    console.log(registro['@_place_id']);
     if( arreglo[i+1].type.diesel &&  arreglo[i+2].type.regular){
 
         registro.type.diesel ={
@@ -122,6 +128,27 @@ if(registro['@_place_id'] == arreglo[i+1]['@_place_id'] &&  registro['@_place_id
             ...arreglo[i+2].type.regular,
            }
     }
+
+
+  if( arreglo[i+1].type.regular &&  arreglo[i+2].type.diesel){
+
+        registro.type.regular ={
+            ...arreglo[i+1].type.regular,
+           }
+
+           registro.type.diesel ={
+            ...arreglo[i+2].type.diesel,
+           }
+    }   else if(arreglo[i+1].type.regular){
+        registro.type.regular ={
+            ...arreglo[i+1].type.regular,
+           }
+    } else if(arreglo[i+2].type.diesel){
+        registro.type.diesel ={
+            ...arreglo[i+2].type.diesel,
+           }
+    }
+
 }
 
               if(arreglo[i+1].type.regular && arreglo[i+1].type.diesel){
