@@ -307,7 +307,8 @@ else{
                 registrosEnUnaSolaFila = arregloDefinitivo.filter((gasolinera)=> 
                 gasolinera.lugar.cre_id.split('/')[1] == 4332  || gasolinera.lugar.cre_id.split('/')[1] == 2942  ||
                 gasolinera.lugar.cre_id.split('/')[1] == 9588  || gasolinera.lugar.cre_id.split('/')[1] == 1192  ||
-                gasolinera.lugar.cre_id.split('/')[1] == 1190   
+                gasolinera.lugar.cre_id.split('/')[1] == 1190  || gasolinera.lugar.cre_id.split('/')[1] == 4326  ||
+                gasolinera.lugar.cre_id.split('/')[1] == 4323  || gasolinera.lugar.cre_id.split('/')[1] == 4351
                 )
 
                    //logica de un solo registro cuando se repite 2 veces
@@ -387,7 +388,9 @@ else{
                 registrosEnUnaSolaFila= arregloDefinitivo.filter((gasolinera)=> 
                 gasolinera.lugar.cre_id.split('/')[1] == 4317  || gasolinera.lugar.cre_id.split('/')[1] == 4770  ||
                 gasolinera.lugar.cre_id.split('/')[1] == 3644  || gasolinera.lugar.cre_id.split('/')[1] == 7528  ||
-                gasolinera.lugar.cre_id.split('/')[1] == 6832  || gasolinera.lugar.cre_id.split('/')[1] == 7793 || gasolinera.lugar.cre_id.split('/')[1] == 4311 || gasolinera.lugar.cre_id.split('/')[1] == 4293
+                gasolinera.lugar.cre_id.split('/')[1] == 6832  || gasolinera.lugar.cre_id.split('/')[1] == 7793  || 
+                gasolinera.lugar.cre_id.split('/')[1] == 4311  || gasolinera.lugar.cre_id.split('/')[1] == 4293  || 
+                gasolinera.lugar.cre_id.split('/')[1] == 13086
                 )
                 
                 
