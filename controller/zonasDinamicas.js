@@ -387,7 +387,7 @@ else{
                 registrosEnUnaSolaFila= arregloDefinitivo.filter((gasolinera)=> 
                 gasolinera.lugar.cre_id.split('/')[1] == 4317  || gasolinera.lugar.cre_id.split('/')[1] == 4770  ||
                 gasolinera.lugar.cre_id.split('/')[1] == 3644  || gasolinera.lugar.cre_id.split('/')[1] == 7528  ||
-                gasolinera.lugar.cre_id.split('/')[1] == 6832  || gasolinera.lugar.cre_id.split('/')[1] == 7793
+                gasolinera.lugar.cre_id.split('/')[1] == 6832  || gasolinera.lugar.cre_id.split('/')[1] == 7793 || gasolinera.lugar.cre_id.split('/')[1] == 4311 || gasolinera.lugar.cre_id.split('/')[1] == 4293
                 )
                 
                 
