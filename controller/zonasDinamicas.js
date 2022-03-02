@@ -467,14 +467,15 @@ else{
                 arregloFiltradoPorZona = eliminandoDuplicados;
 
                break;  
-            //registro repetido  original 10
+            //registro repetido  original 11
                case 'ejido-modelo':
                 registrosEnUnaSolaFila = arregloDefinitivo.filter((gasolinera)=> 
                 gasolinera.lugar.cre_id.split('/')[1] == 11270  || gasolinera.lugar.cre_id.split('/')[1] == 1206  ||
                 gasolinera.lugar.cre_id.split('/')[1] == 1535  || gasolinera.lugar.cre_id.split('/')[1] == 10951  ||
                 gasolinera.lugar.cre_id.split('/')[1] == 22646  || gasolinera.lugar.cre_id.split('/')[1] == 5537 ||
                 gasolinera.lugar.cre_id.split('/')[1] == 1453  || gasolinera.lugar.cre_id.split('/')[1] == 1087 ||
-                gasolinera.lugar.cre_id.split('/')[1] == 4334  || gasolinera.lugar.cre_id.split('/')[1] == 6355
+                gasolinera.lugar.cre_id.split('/')[1] == 4334  || gasolinera.lugar.cre_id.split('/')[1] == 6355  ||
+                gasolinera.lugar.cre_id.split('/')[1] == 6285
                 )
                 
               //logica de un solo registro cuando se repite 2 veces
