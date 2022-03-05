@@ -1,9 +1,13 @@
 const path = require("path");
 const fs = require("fs");
+const cron = require("node-cron");
 const {XMLParser} = require("fast-xml-parser");
+
 const {arregloFiltradoPorLugarAcapulco} = require("../helpers/filter_place_and_price")
-const {registroEnUnaSolaDFila} = require("../helpers/registrosEnUnaFila")
-const {registroEnUnaSolaFilaDinamico} = require("../helpers/registroEnUnaFilaDinamico")
+const { reporteXML } = require("../helpers/writeFileXML");
+const { arregloFinal } = require("../helpers/registroZona");
+
+
 const options = {
     ignoreAttributes: false,
     attributeNamePrefix : "@_",
@@ -11,12 +15,21 @@ const options = {
 };
 const parser = new XMLParser(options);
 
+reporteXML('prices','places')
+
+cron.schedule('0 */4 * * *', () => {
+    reporteXML('prices','places')
+
+})
+
+
+
+
 const gasolinerasPorZonaDinamica = (req,res)=>{
     const {zona} = req.params;
     let arregloFiltradoPorZona = [];
-    let arregloMapeadoConValoresNulos = [];
+
     let registrosEnUnaSolaFila = [];
-    let eliminandoDuplicados = [];
 
     
 
@@ -97,39 +110,12 @@ const gasolinerasPorZonaDinamica = (req,res)=>{
                 gasolinera.lugar.cre_id.split('/')[1] == 9356  || gasolinera.lugar.cre_id.split('/')[1] == 23041 
                 )
 
-                          //logica de un solo registro cuando se repite 2 veces
-                          arregloMapeadoConValoresNulos = registrosEnUnaSolaFila.map((gasolinera,i,arreglo) =>{
-                            if(   i < registrosEnUnaSolaFila.length -1){
-                                    
-                                const registro = registroEnUnaSolaFilaDinamico(gasolinera,i,arreglo)
-                                return registro
-                                
-                            }
-                   
-                    else{
-                                 return gasolinera
-                    }
-    
-                    })
-                
-                // arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
-            
-                eliminandoDuplicados = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined ).reverse().filter( (gasolinera,i,arreglo)=>{
-                    if(i < arreglo.length -1){
-                        if(gasolinera.lugar.cre_id.split('/')[1] != arreglo[i+1].lugar.cre_id.split('/')[1] ){
-                            return gasolinera
-                        }
-                    }
-                    else{
-                        return gasolinera
-                    }
-                })
-                
-                
-                arregloFiltradoPorZona = eliminandoDuplicados;
-
-
+                arregloFiltradoPorZona = arregloFinal(registrosEnUnaSolaFila)
+               
+               
                 break;
+
+
                 
                 //registro repetido original 5
                 case 'coyuca':
@@ -138,37 +124,8 @@ const gasolinerasPorZonaDinamica = (req,res)=>{
                     gasolinera.lugar.cre_id.split('/')[1] == 6980  || gasolinera.lugar.cre_id.split('/')[1] == 1180  ||
                     gasolinera.lugar.cre_id.split('/')[1] == 13644 
                     )
-                                        //logica de un solo registro cuando se repite 2 veces
-                          arregloMapeadoConValoresNulos = registrosEnUnaSolaFila.map((gasolinera,i,arreglo) =>{
-                            if(   i < registrosEnUnaSolaFila.length -1){
-                                    
-                                const registro = registroEnUnaSolaFilaDinamico(gasolinera,i,arreglo)
-                                return registro
-                                
-                            }
-                   
-                    else{
-                                 return gasolinera
-                             }
-    
-                    })
-                
-                // arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
-
-                eliminandoDuplicados = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined ).reverse().filter( (gasolinera,i,arreglo)=>{
-                    if(i < arreglo.length -1){
-                        if(gasolinera.lugar.cre_id.split('/')[1] != arreglo[i+1].lugar.cre_id.split('/')[1] ){
-                            return gasolinera
-                        }
-                    }
-                    else{
-                        return gasolinera
-                    }
-                })
-                
-                
-                arregloFiltradoPorZona = eliminandoDuplicados;
-
+                    
+                    arregloFiltradoPorZona = arregloFinal(registrosEnUnaSolaFila)
 
 
                     break;
@@ -182,35 +139,8 @@ const gasolinerasPorZonaDinamica = (req,res)=>{
                 gasolinera.lugar.cre_id.split('/')[1] == 4352  
                 )
 
-                          //logica de un solo registro cuando se repite 2 veces
-                          arregloMapeadoConValoresNulos = registrosEnUnaSolaFila.map((gasolinera,i,arreglo) =>{
-                            if(   i < registrosEnUnaSolaFila.length -1){
-                                    
-                                const registro = registroEnUnaSolaFilaDinamico(gasolinera,i,arreglo)
-                                return registro
-                                
-                            }
-                   
-                    else{
-                                 return gasolinera
-                             }
-    
-                    })
-                //quitando los valores nulos del arreglo
-                // arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
-                eliminandoDuplicados = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined ).reverse().filter( (gasolinera,i,arreglo)=>{
-                    if(i < arreglo.length -1){
-                        if(gasolinera.lugar.cre_id.split('/')[1] != arreglo[i+1].lugar.cre_id.split('/')[1] ){
-                            return gasolinera
-                        }
-                    }
-                    else{
-                        return gasolinera
-                    }
-                })
-                
-                
-                arregloFiltradoPorZona = eliminandoDuplicados;
+                arregloFiltradoPorZona = arregloFinal(registrosEnUnaSolaFila)
+                          
 
 
                break;
@@ -224,36 +154,9 @@ const gasolinerasPorZonaDinamica = (req,res)=>{
                 )
 
                     //logica de un solo registro cuando se repite 2 veces
-                     arregloMapeadoConValoresNulos = registrosEnUnaSolaFila.map((gasolinera,i,arreglo) =>{
-                        if(   i < registrosEnUnaSolaFila.length -1){
-                                
-                            const registro = registroEnUnaSolaFilaDinamico(gasolinera,i,arreglo)
-                            return registro
-                            
-                        }
-               
-                else{
-                             return gasolinera
-                         }
-
-                })
-                //quitando los valores nulos del arreglo
-                // arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
-
-                eliminandoDuplicados = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined ).reverse().filter( (gasolinera,i,arreglo)=>{
-                    if(i < arreglo.length -1){
-                        if(gasolinera.lugar.cre_id.split('/')[1] != arreglo[i+1].lugar.cre_id.split('/')[1] ){
-                            return gasolinera
-                        }
-                    }
-                    else{
-                        return gasolinera
-                    }
-                })
-                
-                
-                arregloFiltradoPorZona = eliminandoDuplicados;
-
+                    //===============================================================
+                    arregloFiltradoPorZona = arregloFinal(registrosEnUnaSolaFila)
+                    //==========================================================
                break;
 
                 //registro repetido  original 13
@@ -267,42 +170,14 @@ const gasolinerasPorZonaDinamica = (req,res)=>{
                 gasolinera.lugar.cre_id.split('/')[1] == 4349  || gasolinera.lugar.cre_id.split('/')[1] == 4377 ||
                 gasolinera.lugar.cre_id.split('/')[1] == 19221
                 )
-      //logica de un solo registro cuando se repite 2 veces
-      arregloMapeadoConValoresNulos = registrosEnUnaSolaFila.map((gasolinera,i,arreglo) =>{
-        if(   i < registrosEnUnaSolaFila.length -1){
-                
-            const registro = registroEnUnaSolaFilaDinamico(gasolinera,i,arreglo)
-            return registro
-            
-        }
 
-else{
-             return gasolinera
-         }
 
-})
-            //quitando los valores nulos del arreglo
-            // arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
-
-            eliminandoDuplicados = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined ).reverse().filter( (gasolinera,i,arreglo)=>{
-                if(i < arreglo.length -1){
-                    if(gasolinera.lugar.cre_id.split('/')[1] != arreglo[i+1].lugar.cre_id.split('/')[1] ){
-                        return gasolinera
-                    }
-                }
-                else{
-                    return gasolinera
-                }
-            })
-            
-            
-            arregloFiltradoPorZona = eliminandoDuplicados;
-
+                arregloFiltradoPorZona = arregloFinal(registrosEnUnaSolaFila)
             
 
                break;
 
-                      //registro repetido  original 5
+                      //registro repetido  original 8
                case 'rena':
                 registrosEnUnaSolaFila = arregloDefinitivo.filter((gasolinera)=> 
                 gasolinera.lugar.cre_id.split('/')[1] == 4332  || gasolinera.lugar.cre_id.split('/')[1] == 2942  ||
@@ -311,37 +186,8 @@ else{
                 gasolinera.lugar.cre_id.split('/')[1] == 4323  || gasolinera.lugar.cre_id.split('/')[1] == 4351
                 )
 
-                   //logica de un solo registro cuando se repite 2 veces
-            arregloMapeadoConValoresNulos = registrosEnUnaSolaFila.map((gasolinera,i,arreglo) =>{
-                if(   i < registrosEnUnaSolaFila.length -1){
-                        
-                    const registro = registroEnUnaSolaFilaDinamico(gasolinera,i,arreglo)
-                    return registro
-                    
-                }
-       
-        else{
-                     return gasolinera
-                 }
-
-        })
-                //quitando los valores nulos del arreglo
-                // arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
-
-                
-            eliminandoDuplicados = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined ).reverse().filter( (gasolinera,i,arreglo)=>{
-                if(i < arreglo.length -1){
-                    if(gasolinera.lugar.cre_id.split('/')[1] != arreglo[i+1].lugar.cre_id.split('/')[1] ){
-                        return gasolinera
-                    }
-                }
-                else{
-                    return gasolinera
-                }
-            })
-            
-            
-            arregloFiltradoPorZona = eliminandoDuplicados;
+                arregloFiltradoPorZona = arregloFinal(registrosEnUnaSolaFila)
+                  
 
 
                break;   
@@ -351,39 +197,12 @@ else{
                 gasolinera.lugar.cre_id.split('/')[1] == 6409  || gasolinera.lugar.cre_id.split('/')[1] == 13058 ||
                 gasolinera.lugar.cre_id.split('/')[1] == 4287
                 )
-         //logica de un solo registro cuando se repite 2 veces
-         arregloMapeadoConValoresNulos = registrosEnUnaSolaFila.map((gasolinera,i,arreglo) =>{
-            if(   i < registrosEnUnaSolaFila.length -1){
-                    
-                const registro = registroEnUnaSolaFilaDinamico(gasolinera,i,arreglo)
-                return registro
-                
-            }
-   
-    else{
-                 return gasolinera
-             }
+                arregloFiltradoPorZona = arregloFinal(registrosEnUnaSolaFila)
 
-    })
-                //quitando los valores nulos del arreglo
-                // arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
-                eliminandoDuplicados = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined ).reverse().filter( (gasolinera,i,arreglo)=>{
-                    if(i < arreglo.length -1){
-                        if(gasolinera.lugar.cre_id.split('/')[1] != arreglo[i+1].lugar.cre_id.split('/')[1] ){
-                            return gasolinera
-                        }
-                    }
-                    else{
-                        return gasolinera
-                    }
-                })
-                
-                
-                arregloFiltradoPorZona = eliminandoDuplicados;
 
                 
                break;
-                 //registro repetido  original 6
+                 //registro repetido  original 9
                case 'servifer':
                 registrosEnUnaSolaFila= arregloDefinitivo.filter((gasolinera)=> 
                 gasolinera.lugar.cre_id.split('/')[1] == 4317  || gasolinera.lugar.cre_id.split('/')[1] == 4770  ||
@@ -394,35 +213,8 @@ else{
                 )
                 
                 
-                    //logica de un solo registro cuando se repite 2 veces
-         arregloMapeadoConValoresNulos = registrosEnUnaSolaFila.map((gasolinera,i,arreglo) =>{
-            if(   i < registrosEnUnaSolaFila.length -1){
+                arregloFiltradoPorZona = arregloFinal(registrosEnUnaSolaFila)
                     
-                const registro = registroEnUnaSolaFilaDinamico(gasolinera,i,arreglo)
-                return registro
-                
-            }
-   
-    else{
-                 return gasolinera
-             }
-
-    })
-                //quitando los valores nulos del arreglo
-                // arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
-                eliminandoDuplicados = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined ).reverse().filter( (gasolinera,i,arreglo)=>{
-                    if(i < arreglo.length -1){
-                        if(gasolinera.lugar.cre_id.split('/')[1] != arreglo[i+1].lugar.cre_id.split('/')[1] ){
-                            return gasolinera
-                        }
-                    }
-                    else{
-                        return gasolinera
-                    }
-                })
-                
-                
-                arregloFiltradoPorZona = eliminandoDuplicados;
 
                break;  
 
@@ -436,38 +228,15 @@ else{
                 gasolinera.lugar.cre_id.split('/')[1] == 8420
                 )
 
-              //logica de un solo registro cuando se repite 2 veces
-         arregloMapeadoConValoresNulos = registrosEnUnaSolaFila.map((gasolinera,i,arreglo) =>{
-            if(   i < registrosEnUnaSolaFila.length -1){
-                    
-                const registro = registroEnUnaSolaFilaDinamico(gasolinera,i,arreglo)
-                return registro
-                
-            }
-   
-    else{
-                 return gasolinera
-             }
-
-    })
-                
-                // arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
-                eliminandoDuplicados = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined ).reverse().filter( (gasolinera,i,arreglo)=>{
-                    if(i < arreglo.length -1){
-                        if(gasolinera.lugar.cre_id.split('/')[1] != arreglo[i+1].lugar.cre_id.split('/')[1] ){
-                            return gasolinera
-                        }
-                    }
-                    else{
-                        return gasolinera
-                    }
-                })
-                
-                
-                arregloFiltradoPorZona = eliminandoDuplicados;
+                arregloFiltradoPorZona = arregloFinal(registrosEnUnaSolaFila)
+              
 
                break;  
-            //registro repetido  original 11
+
+
+
+
+                //registro repetido  original 11
                case 'ejido-modelo':
                 registrosEnUnaSolaFila = arregloDefinitivo.filter((gasolinera)=> 
                 gasolinera.lugar.cre_id.split('/')[1] == 11270  || gasolinera.lugar.cre_id.split('/')[1] == 1206  ||
@@ -477,35 +246,11 @@ else{
                 gasolinera.lugar.cre_id.split('/')[1] == 4334  || gasolinera.lugar.cre_id.split('/')[1] == 6355  ||
                 gasolinera.lugar.cre_id.split('/')[1] == 6285
                 )
+
+                arregloFiltradoPorZona = arregloFinal(registrosEnUnaSolaFila)
+
                 
-              //logica de un solo registro cuando se repite 2 veces
-              arregloMapeadoConValoresNulos = registrosEnUnaSolaFila.map((gasolinera,i,arreglo) =>{
-                if(   i < registrosEnUnaSolaFila.length -1){
-                        
-                    // const registro = registroEnUnaSolaFilaDinamico(gasolinera,i,arreglo)
-                    const registro = registroEnUnaSolaFilaDinamico(gasolinera,i,arreglo)
-                    return registro
-                    
-                }
-       
-           
-    
-        })
-                    
-                    // arregloFiltradoPorZona = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined )
-                          eliminandoDuplicados = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined ).reverse().filter( (gasolinera,i,arreglo)=>{
-                    if(i < arreglo.length -1){
-                        if(gasolinera.lugar.cre_id.split('/')[1] != arreglo[i+1].lugar.cre_id.split('/')[1] ){
-                            return gasolinera
-                        }
-                    }
-                    else{
-                        return gasolinera
-                    }
-                })
-                
-                
-                arregloFiltradoPorZona = eliminandoDuplicados;            
+                     
                break; 
 
                // original 6
@@ -516,37 +261,9 @@ else{
                 gasolinera.lugar.cre_id.split('/')[1] == 19967  || gasolinera.lugar.cre_id.split('/')[1] == 4353
                 )
 
-               console.log( registrosEnUnaSolaFila[6])
-                                           //logica de un solo registro cuando se repite 2 veces
-                  //logica de un solo registro cuando se repite 2 veces
-                  arregloMapeadoConValoresNulos = registrosEnUnaSolaFila.map((gasolinera,i,arreglo) =>{
-                    if(   i < registrosEnUnaSolaFila.length -1){
-                            
-                        const registro = registroEnUnaSolaFilaDinamico(gasolinera,i,arreglo)
-                        return registro
-                        
-                    }
-           
-            else{
-                         return gasolinera
-            }
+                arregloFiltradoPorZona = arregloFinal(registrosEnUnaSolaFila)
 
-            })
-        
-        eliminandoDuplicados = arregloMapeadoConValoresNulos.filter(gasolinera => gasolinera !==undefined ).reverse().filter( (gasolinera,i,arreglo)=>{
-            if(i < arreglo.length -1){
-                if(gasolinera.lugar.cre_id.split('/')[1] != arreglo[i+1].lugar.cre_id.split('/')[1] ){
-                    return gasolinera
-                }
-            }
-            else{
-                return gasolinera
-            }
-        })
-        
-        
-        arregloFiltradoPorZona = eliminandoDuplicados;
-
+                                                           
 
                break; 
 
